@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#166534">
+  <meta name="description" content="দৈনিক খাবার ও জমা টাকার সহজ হিসাব">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>খাবার হিসাব</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">খা</div><div><h1>খাবার হিসাব</h1><p>আপনার দৈনিক মিল ও টাকার হিসাব</p></div></div>
+    <button id="themeBtn" class="icon-btn" aria-label="থিম পরিবর্তন">☾</button>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div><span class="eyebrow">মোট বকেয়া</span><div class="hero-amount" id="dueAmount">৳ 0</div><p id="dueHint">সব হিসাব আপডেট আছে</p></div>
+      <div class="hero-mark">৳</div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card"><span class="stat-label">মোট মিল</span><strong id="totalMeals">0</strong><small>দুপুর + রাত</small></article>
+      <article class="stat-card"><span class="stat-label">খাবারের খরচ</span><strong id="totalCost">৳ 0</strong><small>প্রতি মিল ৳ 60</small></article>
+      <article class="stat-card"><span class="stat-label">মোট জমা</span><strong id="totalPaid">৳ 0</strong><small>আপনার পেমেন্ট</small></article>
+    </section>
+
+    <nav class="tabs" aria-label="প্রধান মেনু">
+      <button class="tab active" data-tab="meals">🍽️ খাবারের হিসাব</button>
+      <button class="tab" data-tab="payments">৳ জমার ইতিহাস</button>
+      <button class="tab" data-tab="summary">📊 সারাংশ</button>
+    </nav>
+
+    <section id="mealsPanel" class="panel">
+      <div class="section-heading"><div><h2>দিন অনুযায়ী খাবার</h2><p>যেদিন যে মিল খেয়েছেন, টিক দিয়ে রাখুন।</p></div></div>
+      <div class="toolbar">
+        <label class="field date-field">তারিখ <input id="mealDate" type="date"></label>
+        <button id="todayBtn" class="btn btn-quiet">আজ</button>
+      </div>
+      <div class="meal-options">
+        <label class="meal-option"><div class="meal-emoji">☀️</div><div class="meal-info"><strong>দুপুরের খাবার</strong><span>১ মিল · ৳ ৬০</span></div><input type="checkbox" id="lunchCheck"><span class="check-ui"></span></label>
+        <label class="meal-option"><div class="meal-emoji">🌙</div><div class="meal-info"><strong>রাতের খাবার</strong><span>১ মিল · ৳ ৬০</span></div><input type="checkbox" id="dinnerCheck"><span class="check-ui"></span></label>
+      </div>
+      <div class="meal-footer"><span id="dayCost">এই দিনের খরচ: ৳ 0</span><button id="saveMealsBtn" class="btn btn-primary">হিসাব সংরক্ষণ</button></div>
+      <div class="notice">আপনার খাবারের হিসাব এই ডিভাইসেই সংরক্ষিত থাকবে।</div>
+    </section>
+
+    <section id="paymentsPanel" class="panel hidden">
+      <div class="section-heading"><div><h2>টাকা জমা</h2><p>কবে কত টাকা দিয়েছেন, তার রেকর্ড রাখুন।</p></div></div>
+      <form id="paymentForm" class="payment-form">
+        <label class="field">জমার তারিখ<input id="paymentDate" type="date" required></label>
+        <label class="field">টাকার পরিমাণ (৳)<input id="paymentAmount" type="number" min="1" step="1" placeholder="যেমন: 1000" required></label>
+        <label class="field">নোট <input id="paymentNote" type="text" maxlength="80" placeholder="ঐচ্ছিক"></label>
+        <button class="btn btn-primary" type="submit">＋ জমা যোগ করুন</button>
+      </form>
+      <div class="list-heading"><h3>জমার ইতিহাস</h3><span id="paymentCount">0টি রেকর্ড</span></div>
+      <div id="paymentList" class="history-list"></div>
+    </section>
+
+    <section id="summaryPanel" class="panel hidden">
+      <div class="section-heading"><div><h2>হিসাবের সারাংশ</h2><p>মোট খাবার, খরচ ও জমার বিস্তারিত।</p></div></div>
+      <div class="summary-list">
+        <div><span>দুপুরের মিল</span><strong id="lunchCount">0</strong></div>
+        <div><span>রাতের মিল</span><strong id="dinnerCount">0</strong></div>
+        <div><span>মোট মিল</span><strong id="summaryMeals">0</strong></div>
+        <div><span>মোট খাবারের খরচ</span><strong id="summaryCost">৳ 0</strong></div>
+        <div><span>মোট টাকা জমা</span><strong id="summaryPaid">৳ 0</strong></div>
+        <div class="summary-due"><span>বাকি / অগ্রিম</span><strong id="summaryDue">৳ 0</strong></div>
+      </div>
+      <div class="section-heading month-heading"><div><h3>তারিখ অনুযায়ী মিল</h3><p>সর্বশেষ দিন আগে দেখানো হবে।</p></div></div>
+      <div id="dayList" class="history-list"></div>
+      <button id="exportBtn" class="btn btn-outline full-btn">হিসাব CSV হিসেবে ডাউনলোড</button>
+      <button id="resetBtn" class="btn btn-danger full-btn">সব হিসাব মুছে ফেলুন</button>
+    </section>
+    <footer>খাবার হিসাব <span>·</span> সহজ, ব্যক্তিগত, অফলাইন</footer>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
